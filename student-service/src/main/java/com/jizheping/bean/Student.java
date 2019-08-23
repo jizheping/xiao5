@@ -29,22 +29,17 @@ public class Student {
     private String url;
 
     @Transient
-    private String hobbyNames;
-
-    public String getHobbyNames() {
-        return hobbyNames;
-    }
-
-    public void setHobbyNames(String hobbyNames) {
-        this.hobbyNames = hobbyNames;
-    }
-
-    @Transient
     private List<Integer> pid;
 
     @ManyToMany
     @JoinTable(name = "studentHobbyMiddle",joinColumns = @JoinColumn(name = "sid"),inverseJoinColumns = @JoinColumn(name = "hid"))
     private List<Hobby> hobbys;
+
+    @Transient
+    private String hids;
+
+    @Transient
+    private String hobbyNames;
 
     @Override
     public String toString() {
@@ -65,6 +60,8 @@ public class Student {
                 ", url='" + url + '\'' +
                 ", pid=" + pid +
                 ", hobbys=" + hobbys +
+                ", hids='" + hids + '\'' +
+                ", hobbyNames='" + hobbyNames + '\'' +
                 '}';
     }
 
@@ -196,10 +193,26 @@ public class Student {
         this.hobbys = hobbys;
     }
 
+    public String getHids() {
+        return hids;
+    }
+
+    public void setHids(String hids) {
+        this.hids = hids;
+    }
+
+    public String getHobbyNames() {
+        return hobbyNames;
+    }
+
+    public void setHobbyNames(String hobbyNames) {
+        this.hobbyNames = hobbyNames;
+    }
+
     public Student() {
     }
 
-    public Student(String name, String sex, Integer age, Date birthday, Integer shengId, Integer shiId, Integer xianId, String shengName, String shiName, String xianName, Integer cid, String cname, String url, List<Integer> pid, List<Hobby> hobbys) {
+    public Student(String name, String sex, Integer age, Date birthday, Integer shengId, Integer shiId, Integer xianId, String shengName, String shiName, String xianName, Integer cid, String cname, String url, List<Integer> pid, List<Hobby> hobbys, String hids, String hobbyNames) {
         this.name = name;
         this.sex = sex;
         this.age = age;
@@ -215,5 +228,7 @@ public class Student {
         this.url = url;
         this.pid = pid;
         this.hobbys = hobbys;
+        this.hids = hids;
+        this.hobbyNames = hobbyNames;
     }
 }

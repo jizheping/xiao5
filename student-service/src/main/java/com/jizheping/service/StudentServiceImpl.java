@@ -7,8 +7,10 @@ import com.jizheping.bean.Student;
 import com.jizheping.cityFeign.CityFeign;
 import com.jizheping.clazzFeign.ClazzFeign;
 import com.jizheping.dao.StudentDao;
+import com.jizheping.hobbyFeign.HobbyFeign;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sun.security.ssl.HandshakeMessage;
 
 import java.text.ParseException;
 import java.util.*;
@@ -21,11 +23,14 @@ public class StudentServiceImpl implements StudentService{
 
     private final ClazzFeign clazzFeign;
 
+    private final HobbyFeign hobbyFeign;
+
     @Autowired
-    public StudentServiceImpl(StudentDao studentDao, CityFeign cityFeign, ClazzFeign clazzFeign) {
+    public StudentServiceImpl(StudentDao studentDao, CityFeign cityFeign, ClazzFeign clazzFeign, HobbyFeign hobbyFeign) {
         this.studentDao = studentDao;
         this.cityFeign = cityFeign;
         this.clazzFeign = clazzFeign;
+        this.hobbyFeign = hobbyFeign;
     }
 
 
@@ -41,20 +46,26 @@ public class StudentServiceImpl implements StudentService{
 
         List<Integer> ids = new ArrayList<>();
 
+        List<Hobby> hobbyList = hobbyFeign.getHobbyList();
+
         for(Student student : studentList){
             ids.add(student.getShengId());
             ids.add(student.getShiId());
             ids.add(student.getXianId());
 
-            StringBuilder hobbyNames = new StringBuilder();
+            String hobbyNames = "";
+            String hids = "";
 
             for(Hobby hobby : student.getHobbys()){
-                hobbyNames.append(",").append(hobby.getName());
+                hobbyNames += "," + hobby.getName();
+                hids += "," + hobby.getId();
             }
 
-            hobbyNames = new StringBuilder(hobbyNames.substring(1));
+            hids = hids.substring(1);
+            hobbyNames = hobbyNames.substring(1);
 
             student.setHobbyNames(hobbyNames.toString());
+            student.setHids(hids.toString());
         }
 
         List<City> cityList = cityFeign.getCityListByIds(ids);
